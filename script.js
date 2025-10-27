@@ -1503,7 +1503,7 @@ async function spinWheels() {
     validateSpinConditions();
 }
 // ...existing code...
-
+spinBtn.addEventListener('click', spinWheels);
 
 
 
@@ -1907,4 +1907,5 @@ async function spinWheels() {
             }
         }
     });
+
 });
