@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEEDO | RAFFLE SYSTEM</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="lottery.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.6.0/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-container">
+                   <img src="CEEDO LOGO.jpg" alt="CEEDO Logo" style="width: 100px; height: 100px; border-radius: 8px;">
+                </div>
+                <div class="title-section">
+                    <h1 class="header-title">City Education & Excellence Development Office-Raffle System</h1>
+                    <p class="header-subtitle">Where Learning and Rewards Come Together</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="settingsBtn" class="settings-btn" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button id="themeToggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="left-panel">
+            <!-- Tabbed Interface - REORDERED -->
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="config">
+                        <i class="fas fa-cog"></i> Raffle Configuration
+                    </button>
+                    <button class="tab-btn" data-tab="filters">
+                        <i class="fas fa-filter"></i> Wheel Filter
+                    </button>
+                    <button class="tab-btn" data-tab="winners">
+                        <i class="fas fa-trophy"></i> Winners Board
+                    </button>
+                </div>
+
+                <!-- Configuration Tab -->
+                <div class="tab-content active" id="configTab">
+                    <div class="config-section">
+                        <div class="input-group">
+                            <label for="sheetsUrl">
+                                <i class="fas fa-table"></i> Google Spreadsheet Link:
+                            </label>
+                            <input type="text" id="sheetsUrl" placeholder="Paste your Google Sheets link here... (Auto-loads Column B)" style="margin-bottom: 10px;">
+                            <div class="auto-load-indicator">
+                                <i class="fas fa-magic"></i> Auto-loading enabled - paste URL to instantly load participants
+                            </div>
+                            <p class="hint" id="sheetsStatus" style="margin-top: 8px; color: #6b7280; font-size: 0.9rem;"></p>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="prizeName">
+                                <i class="fas fa-gift"></i> Prize Name:
+                            </label>
+                            <input type="text" id="prizeName" placeholder="Enter prize description...">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="participantInput">
+                                <i class="fas fa-users"></i> Participants: 
+                                <span id="participantCount" class="count-badge">0</span>
+                            </label>
+                            <textarea id="participantInput" placeholder="Enter participant names, one per line"></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="numWinners">
+                                <i class="fas fa-user-check"></i> Number of Winners:
+                                <span class="wheel-count-badge" id="wheelCountBadge">1 Wheel</span>
+                            </label>
+                            <div class="number-control">
+                                <button class="decrement" id="decrementBtn">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="numWinners" min="1" max="10" value="1">
+                                <button class="increment" id="incrementBtn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="removeWinner" checked>
+                            <label for="removeWinner">Remove Winner After Spin</label>
+                        </div>
+
+           <!--              <div class="checkbox-group">
+                            <input type="checkbox" id="toggleSecretName" checked>
+                            <label for="toggleSecretName">Enable Secret Names</label>
+                        </div>
+
+                        <div id="secretNameContainer" class="input-group">
+                            <label for="secretName">
+                                <i class="fas fa-user-secret"></i> Secret Names:
+                            </label>
+                            <textarea id="secretName" placeholder="Enter secret names, one per line"></textarea>
+                            <p class="hint">Use Ctrl+M to quickly add a secret name</p>
+                        </div> -->
+                    </div>
+                </div>
+
+                <!-- Wheel Filters Tab -->
+                <div class="tab-content" id="filtersTab">
+                    <div class="wheel-filters-section">
+                        <h3><i class="fas fa-filter"></i> Wheel Filters</h3>
+                        <div id="wheelFiltersContainer">
+                            <!-- Dynamic wheel filters will be generated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Winners Tab -->
+                <div class="tab-content" id="winnersTab">
+                    <div class="winners-section">
+                        <div class="winners-container">
+                            <ul id="winnersList"></ul>
+                        </div>
+                        <div class="panel-actions">
+                            <button id="downloadBtn" class="action-btn download-btn">
+                                <i class="fas fa-file-excel"></i> Export to Excel
+                            </button>
+                            <button id="clearWinnersBtn" class="action-btn clear-btn">
+                                <i class="fas fa-trash-alt"></i> Clear Winners
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="panel-header">
+                <h2><i class="fas fa-dharmachakra"></i> Multi-Wheel Raffle System</h2>
+                <div class="validation-status" id="validationStatus">
+                    <span class="status-text" id="statusText">Ready to spin!</span>
+                </div>
+            </div>
+
+            <div class="wheels-section" id="wheelsSection">
+                <div class="wheels-grid" id="wheelsGrid">
+                    <!-- Dynamic wheels will be created here -->
+                </div>
+                
+                <button id="spinBtn" class="spin-btn" disabled>
+                    <i class="fas fa-play"></i> 
+                    <span class="spin-text">Spin the Wheels!</span>
+                    <div class="spin-shimmer"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Official Logos Section on Landing Page -->
+    <section class="main-page-logos">
+        <div class="logos-section-container">
+            <h3>Organized by the Government of Balanga City</h3>
+            <div class="logos-container">
+                <div class="logo-item">
+                    <img src="Balanga_City_logo.png" alt="Balanga City LGU">
+                    <span class="logo-caption">City Government of Balanga</span>
+                </div>
+                <div class="logo-item">
+                    <img src="RG Logo.png" alt="Mayor's Office">
+                    <span class="logo-caption">Office of the Mayor</span>
+                </div>
+                <div class="logo-item">
+                    <img src="CEEDO LOGO.jpg" alt="CEEDO">
+                    <span class="logo-caption">CEEDO</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content settings-modal-content">
+            <div class="modal-header">
+                <div class="modal-logo">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div class="modal-title-section">
+                    <h2 class="modal-title">Settings</h2>
+                    <p class="modal-subtitle">Customize your raffle experience</p>
+                </div>
+                <button class="close-btn" id="settingsCloseBtn"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="settings-group">
+                    <h3><i class="fas fa-palette"></i> Theme Settings</h3>
+                    <div class="setting-item">
+                        <label for="themeSelect">Color Theme:</label>
+                        <select id="themeSelect">
+                            <option value="light">Light Theme</option>
+                            <option value="dark">Dark Theme</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h3><i class="fas fa-volume-up"></i> Sound Settings</h3>
+                    <div class="setting-item">
+                        <label for="soundEnabled">
+                            <input type="checkbox" id="soundEnabled" checked>
+                            Enable Sound Effects
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label for="soundSelect">Spin Sound:</label>
+                        <select id="soundSelect">
+                            <option value="whoosh">Whoosh (Default)</option>
+                            <option value="ticking">Ticking Clock</option>
+                            <option value="drumroll">Drumroll</option>
+                            <option value="arcade">Arcade Beeps</option>
+                            <option value="casino">Casino Wheel</option>
+                            <option value="swoosh">Electronic Swoosh</option>
+                            <option value="mechanical">Mechanical Ratchet</option>
+                            <option value="space">Space Warp</option>
+                            <option value="wind">Wind Chimes</option>
+                            <option value="digital">Digital Pulse</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h3><i class="fas fa-clock"></i> Spin Duration</h3>
+                    <div class="setting-item">
+                        <label for="spinDuration">Spin Duration: <span id="spinDurationValue">3</span> seconds</label>
+                        <input type="range" id="spinDuration" min="2" max="10" value="3" step="1">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <div class="footer-top">
+                    <button id="saveSettingsBtn" class="action-btn success-btn">
+                        <i class="fas fa-save"></i> Save Settings
+                    </button>
+                    <button id="resetSettingsBtn" class="action-btn clear-btn">
+                        <i class="fas fa-undo"></i> Reset to Default
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Winners Modal -->
+    <div id="winnersModal" class="modal">
+        <div class="modal-content" id="modalContentForScreenshot">
+            <div class="modal-header">
+                <div class="modal-logo">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="modal-title-section">
+                    <h2 class="modal-title">🎉 Congratulations to the Winners! 🎉</h2>
+                    <p class="modal-subtitle" id="prizeDisplay"></p>
+                </div>
+                <button class="close-btn" id="modalCloseBtn"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="modal-body">
+                <table id="winnersTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Winner Name</th>
+                            <th>Prize & Wheel</th>
+                        </tr>
+                    </thead>
+                    <tbody id="winnersTableBody">
+                        <!-- Winner rows will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="modal-footer">
+                <div class="footer-top">
+                    <button id="downloadExcelModalBtn" class="action-btn download-btn">
+                        <i class="fas fa-file-excel"></i> Download Excel File
+                    </button>
+                    <button id="downloadScreenshotBtn" class="action-btn success-btn">
+                        <i class="fas fa-camera"></i> Save Screenshot
+                    </button>
+                    <button id="closeModalBtn" class="action-btn success-btn">
+                        <i class="fas fa-check"></i> Done
+                    </button>
+                </div>
+                
+                <!-- Official Logos Section -->
+                <div class="footer-logos">
+                    <h4>Official Organizers</h4>
+                    <div class="logos-container">
+                        <div class="logo-item">
+                            <img src="Balanga_City_logo.png" alt="Balanga City LGU">
+                            <span class="logo-caption">Balanga City LGU</span>
+                        </div>
+                        <div class="logo-item">
+                            <img src="RG Logo.png" alt="Mayor's Office">
+                            <span class="logo-caption">Office of the Mayor</span>
+                        </div>
+                        <div class="logo-item">
+                            <img src="CEEDO LOGO.jpg" alt="CEEDO">
+                            <span class="logo-caption">CEEDO</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-info">
+                    <div class="contact-info">
+                        <p><i class="fas fa-phone"></i> 0960-568-3438</p>
+                        <p><i class="fas fa-map-marker-alt"></i> 2nd Floor, Balanga City Hall, Aguirre Street, Poblacion, Balanga City, Bataan 2100.</p>
+                    </div>
+                    
+                    <div class="footer-icons">
+                        <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="mailto:ceedo.cob@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                        <a href="https://tiktok.com" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="mailto:example@gmail.com" aria-label="Email"><i class="fas fa-at"></i></a>
+                        <a href="https://maps.google.com" target="_blank" aria-label="Location"><i class="fas fa-map-marker-alt"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>Copyright ©2025; City Education & Excellence Development Office</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</body>
+</html>
