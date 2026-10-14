@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@500;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.6.0/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
@@ -39,7 +39,7 @@
 
     <div class="container">
         <div class="left-panel">
-            <!-- Tabbed Interface - REORDERED -->
+            <!-- Tabbed Interface -->
             <div class="tabs-container">
                 <div class="tabs-header">
                     <button class="tab-btn active" data-tab="config">
@@ -76,7 +76,7 @@
 
                         <div class="input-group">
                             <label for="participantInput">
-                                <i class="fas fa-users"></i> Participants: 
+                                <i class="fas fa-users"></i> Participants:
                                 <span id="participantCount" class="count-badge">0</span>
                             </label>
                             <textarea id="participantInput" placeholder="Enter participant names, one per line"></textarea>
@@ -91,13 +91,13 @@
                                 <button class="decrement" id="decrementBtn">
                                     <i class="fas fa-minus"></i>
                                 </button>
-                                <input type="number" id="numWinners" min="1" max="10" value="1">
+                                <input type="number" id="numWinners" min="1" max="100" value="1">
                                 <button class="increment" id="incrementBtn">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="checkbox-group">
                             <input type="checkbox" id="removeWinner" checked>
                             <label for="removeWinner">Remove Winner After Spin</label>
@@ -159,9 +159,9 @@
                 <div class="wheels-grid" id="wheelsGrid">
                     <!-- Dynamic wheels will be created here -->
                 </div>
-                
+
                 <button id="spinBtn" class="spin-btn" disabled>
-                    <i class="fas fa-play"></i> 
+                    <i class="fas fa-play"></i>
                     <span class="spin-text">Spin the Wheels!</span>
                     <div class="spin-shimmer"></div>
                 </button>
@@ -203,7 +203,7 @@
                 </div>
                 <button class="close-btn" id="settingsCloseBtn"><i class="fas fa-times"></i></button>
             </div>
-            
+
             <div class="modal-body">
                 <div class="settings-group">
                     <h3><i class="fas fa-palette"></i> Theme Settings</h3>
@@ -249,7 +249,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="modal-footer">
                 <div class="footer-top">
                     <button id="saveSettingsBtn" class="action-btn success-btn">
@@ -276,7 +276,7 @@
                 </div>
                 <button class="close-btn" id="modalCloseBtn"><i class="fas fa-times"></i></button>
             </div>
-            
+
             <div class="modal-body">
                 <table id="winnersTable">
                     <thead>
@@ -291,7 +291,7 @@
                     </tbody>
                 </table>
             </div>
-            
+
             <div class="modal-footer">
                 <div class="footer-top">
                     <button id="downloadExcelModalBtn" class="action-btn download-btn">
@@ -304,7 +304,7 @@
                         <i class="fas fa-check"></i> Done
                     </button>
                 </div>
-                
+
                 <!-- Official Logos Section -->
                 <div class="footer-logos">
                     <h4>Official Organizers</h4>
@@ -323,13 +323,13 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="footer-info">
                     <div class="contact-info">
                         <p><i class="fas fa-phone"></i> 0960-568-3438</p>
                         <p><i class="fas fa-map-marker-alt"></i> 2nd Floor, Balanga City Hall, Aguirre Street, Poblacion, Balanga City, Bataan 2100.</p>
                     </div>
-                    
+
                     <div class="footer-icons">
                         <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
@@ -339,7 +339,7 @@
                         <a href="https://maps.google.com" target="_blank" aria-label="Location"><i class="fas fa-map-marker-alt"></i></a>
                     </div>
                 </div>
-                
+
                 <div class="footer-bottom">
                     <p>Copyright ©2025; City Education & Excellence Development Office</p>
                 </div>
